@@ -22,6 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Spark Chat"
+rootProject.name = "SparkChat"
 include(":app")
  

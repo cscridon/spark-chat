@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- 1. The starting theme -->
+    <style name="Theme.Splash" parent="Theme.SplashScreen">
+        <!-- Background color of the splash -->
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+
+        <!-- Your transparent PNG logo -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
+
+        <!-- Theme to switch to after the app loads -->
+        <item name="postSplashScreenTheme">@style/Theme.SparkChat</item>
+    </style>
+
     <style name="Theme.SparkChat" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>
