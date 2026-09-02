@@ -1,0 +1,56 @@
+# Gradle & Build Output
+.gradle/
+build/
+**/build/
+.kotlin/
+
+# Local Environment & Configurations
+local.properties
+secrets.properties
+
+# Android Studio & IntelliJ Project Files
+.idea/
+!.idea/codeStyles/
+!.idea/copyright/
+*.iml
+
+# Built Binaries & Metadata
+*.apk
+*.aab
+output-metadata.json
+
+# Native C/C++ Build Directories
+.externalNativeBuild/
+.cxx/
+captures/
+
+# Signing & Credentials
+*.jks
+*.keystore
+google-services.json
+
+# Memory Dumps & Diagnostics
+*.hprof
+*.log
+
+# Android Studio Caches
+.navigation/
+
+# Composite build / Local Gradle Overrides
+.gradle-enterprise/
+gradle-local.properties
+
+# Version Control / Merge Files
+*.orig
+*.rej
+
+# Test & Coverage Outputs
+/fastlane/report.xml
+/fastlane/Preview.html
+
+# OS Generated Files
+.DS_Store
+Thumbs.db
+
+# Project Artifacts
+.artifacts/
