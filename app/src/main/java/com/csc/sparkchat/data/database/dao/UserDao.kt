@@ -3,6 +3,7 @@ package com.csc.sparkchat.data.database.dao
 import androidx.room3.Dao
 import androidx.room3.Query
 import com.csc.sparkchat.data.database.dto.UserWithLastMessageDto
+import com.csc.sparkchat.data.database.entity.UserEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -24,4 +25,7 @@ interface UserDao {
         ORDER BY m.timestamp DESC
     """)
     fun getUsersWithLastMessage(): Flow<List<UserWithLastMessageDto>>
+
+    @Query("SELECT * FROM users WHERE id = :userId")
+    suspend fun getUserById(userId: Long): UserEntity?
 }

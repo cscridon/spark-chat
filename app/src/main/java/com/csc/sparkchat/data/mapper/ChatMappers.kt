@@ -2,6 +2,7 @@ package com.csc.sparkchat.data.mapper
 
 import com.csc.sparkchat.data.database.dto.UserWithLastMessageDto
 import com.csc.sparkchat.data.database.entity.MessageEntity
+import com.csc.sparkchat.data.database.entity.UserEntity
 import com.csc.sparkchat.domain.model.ChatSummary
 import com.csc.sparkchat.domain.model.Message
 import com.csc.sparkchat.domain.model.User
@@ -25,5 +26,13 @@ fun MessageEntity.toDomain(): Message {
         senderId = senderId,
         content = content,
         timestamp = timestamp
+    )
+}
+
+fun UserEntity.toDomain(): User {
+    return User(
+        id = id,
+        name = name,
+        avatarId = avatarId
     )
 }
