@@ -1,6 +1,8 @@
 package com.csc.sparkchat.data.database.dao
 
 import androidx.room3.Dao
+import androidx.room3.Insert
+import androidx.room3.OnConflictStrategy
 import androidx.room3.Query
 import com.csc.sparkchat.data.database.dto.UserWithLastMessageDto
 import com.csc.sparkchat.data.database.entity.UserEntity
@@ -28,4 +30,7 @@ interface UserDao {
 
     @Query("SELECT * FROM users WHERE id = :userId")
     suspend fun getUserById(userId: Long): UserEntity?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUsers(users: List<UserEntity>)
 }

@@ -38,6 +38,7 @@ mockitoKotlin = "6.3.0"
 kotlinxCoroutinesTest = "1.11.0"
 mockk = "1.14.11"
 turbine = "1.2.1"
+robolectric = "4.16.1"
 material3 = "1.4.0"
 foundationLayout = "1.12.0"
 uiGraphics = "1.12.0"
@@ -54,6 +55,7 @@ androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtim
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "navigationCompose" }
 
 # KotlinX & Tooling
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
@@ -85,6 +87,7 @@ androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navig
 # Room ORM
 room-runtime = { group = "androidx.room3", name = "room3-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room3", name = "room3-compiler", version.ref = "room" }
+androidx-room-testing = { group = "androidx.room3", name = "room3-testing", version.ref = "room" }
 
 # Coil Core and Compose support and loading remote images via OkHttp (Standard for Android)
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
@@ -102,6 +105,7 @@ mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", versio
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 androidx-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "uiGraphics" }
