@@ -7,16 +7,26 @@ import androidx.compose.ui.graphics.Color
 
 
 private val LightColorScheme = lightColorScheme(
+    // Primary Brands & Containers
     primary = SparkPrimary,
-    onPrimary = Color.White,
+    onPrimary = SparkTextPrimary, // Text inside primary containers (e.g. Sent message text)
+
+    // Secondary Containers (e.g. Incoming Bubbles)
     secondaryContainer = SparkIncomingBubble,
-    onSecondaryContainer = SparkTextMain,
+    onSecondaryContainer = SparkTextIncoming, // Text inside incoming bubbles
+
+    // Main App Background
     background = SparkBackground,
-    onBackground = SparkTextMain,
+    onBackground = SparkTextMain, // Global app text on raw background
+
+    // Surface Elevation (Cards, Top Bars, Bottom Bars)
     surface = Color.White,
-    onSurface = SparkTextMain,
-    tertiary = Pink40,
-    onTertiary = Color.White
+    onSurface = SparkTextMain, // High-emphasis body/title text on surfaces
+    onSurfaceVariant = SparkTextSecondary, // Low-emphasis text (timestamps, placeholders)
+
+    // Tertiary Accents
+    tertiary = SparkTertiary,
+    onTertiary = SparkTextTertiary
 )
 
 @Composable

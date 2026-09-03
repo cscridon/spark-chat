@@ -1,7 +1,8 @@
 package com.csc.sparkchat.data.database.dto
 
+import androidx.annotation.Keep
 import androidx.room3.ColumnInfo
-
+@Keep
 data class UserWithLastMessageDto(
     @ColumnInfo(name = "id") val userId: Long,
     @ColumnInfo(name = "name") val name: String,

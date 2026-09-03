@@ -39,6 +39,8 @@ kotlinxCoroutinesTest = "1.11.0"
 mockk = "1.14.11"
 turbine = "1.2.1"
 material3 = "1.4.0"
+foundationLayout = "1.12.0"
+uiGraphics = "1.12.0"
 
 
 [libraries]
@@ -101,6 +103,8 @@ kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+androidx-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "uiGraphics" }
 
 
 

@@ -1,11 +1,12 @@
 package com.csc.sparkchat.data.database.entity
 
+import androidx.annotation.Keep
 import androidx.room3.ColumnInfo
 import androidx.room3.Entity
 import androidx.room3.ForeignKey
 import androidx.room3.Index
 import androidx.room3.PrimaryKey
-
+@Keep
 @Entity(
     tableName = "messages",
     foreignKeys = [
@@ -24,6 +25,7 @@ import androidx.room3.PrimaryKey
         )
     ]
 )
+
 
 data class MessageEntity(
     @PrimaryKey(autoGenerate = true)

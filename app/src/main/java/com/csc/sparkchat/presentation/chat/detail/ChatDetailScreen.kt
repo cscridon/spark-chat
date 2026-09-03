@@ -1,162 +1,117 @@
 package com.csc.sparkchat.presentation.chat.detail
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemKey
-import coil3.compose.AsyncImage
-import com.csc.sparkchat.presentation.chat.detail.components.ChatBubble
-import com.csc.sparkchat.presentation.chat.detail.components.DateSectionHeader
-import com.csc.sparkchat.presentation.chat.detail.viewmodel.ChatDetailViewModel
-import kotlinx.coroutines.launch
-import kotlin.math.abs
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.paging.compose.LazyPagingItems
+import com.csc.sparkchat.core.designsystem.theme.SparkChatTheme
+import com.csc.sparkchat.domain.model.Message
+import com.csc.sparkchat.domain.model.User
+import com.csc.sparkchat.presentation.chat.detail.components.ChatBottomBar
+import com.csc.sparkchat.presentation.chat.detail.components.ChatMessageList
+import com.csc.sparkchat.presentation.chat.detail.components.ChatMessageListContent
+import com.csc.sparkchat.presentation.chat.detail.components.ChatTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatDetailScreen(
+    user: User?,
+    lazyPagingItems: LazyPagingItems<Message>?,
+    textState: String,
+    sendAsOtherUser: Boolean,
+    listState: LazyListState,
     onBackClick: () -> Unit,
-    viewModel: ChatDetailViewModel = hiltViewModel()
+    onTextChange: (String) -> Unit,
+    onSendAsOtherUserChange: (Boolean) -> Unit,
+    onSendClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    messagesList: List<Message>? = null // For preview support
 ) {
-    val lazyPagingItems = viewModel.messagesPaged.collectAsLazyPagingItems()
-    val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
-
-    var textState by remember { mutableStateOf("") }
-    var sendAsOtherUser by remember { mutableStateOf(false) }
-
     // Auto-scroll to index 0 (bottom of the chat) whenever the message count updates
-    LaunchedEffect(lazyPagingItems.itemCount) {
-        if (lazyPagingItems.itemCount > 0) {
+    LaunchedEffect(lazyPagingItems?.itemCount ?: messagesList?.size ?: 0) {
+        val count = lazyPagingItems?.itemCount ?: messagesList?.size ?: 0
+        if (count > 0) {
             listState.animateScrollToItem(0)
         }
     }
 
+    // Show shadow if the list content is taller than the screen viewport
+    val showShadow by remember {
+        derivedStateOf { listState.canScrollForward || listState.canScrollBackward }
+    }
+
     Scaffold(
+        modifier = modifier,
         contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
-            TopAppBar(
-                title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        viewModel.user?.let { user ->
-                            AsyncImage(
-                                model = "file:///android_asset/${user.avatarId}",
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(36.dp)
-                                    .clip(CircleShape)
-                            )
-                            Spacer(modifier = Modifier.width(12.dp))
-                            Text(text = user.name, style = MaterialTheme.typography.titleMedium)
-                        }
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    FilterChip(
-                        selected = sendAsOtherUser,
-                        onClick = { sendAsOtherUser = !sendAsOtherUser },
-                        label = { Text(if (sendAsOtherUser) "Replying" else "Me") }
-                    )
-                }
+            ChatTopBar(
+                userName = user?.name,
+                avatarId = user?.avatarId,
+                sendAsOtherUser = sendAsOtherUser,
+                onSendAsOtherUserChange = onSendAsOtherUserChange,
+                onBackClick = onBackClick,
+                showShadow = showShadow
             )
         },
         bottomBar = {
-            Surface(
-                tonalElevation = 2.dp,
-                // Insets consuming both navigation bars AND soft keyboard (IME)
-                modifier = Modifier.windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
-                )
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    OutlinedTextField(
-                        value = textState,
-                        onValueChange = { textState = it },
-                        modifier = Modifier.weight(1f),
-                        placeholder = { Text("Type a message...") },
-                        maxLines = 4
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    IconButton(
-                        onClick = {
-                            if (textState.isNotBlank()) {
-                                viewModel.onSendMessage(textState, sendAsOtherUser)
-                                textState = ""
-                                coroutineScope.launch {
-                                    listState.animateScrollToItem(0)
-                                }
-                            }
-                        },
-                        colors = IconButtonDefaults.iconButtonColors(contentColor = Color(0xFFFE0979))
-                    ) {
-                        Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send")
-                    }
-                }
-            }
+            ChatBottomBar(
+                value = textState,
+                onValueChange = onTextChange,
+                onSendClick = onSendClick,
+                showShadow = showShadow
+            )
         }
     ) { padding ->
-        LazyColumn(
-            state = listState,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(horizontal = 12.dp),
-            reverseLayout = true
-        ) {
-            items(
-                count = lazyPagingItems.itemCount,
-                key = lazyPagingItems.itemKey { it.id }
-            ) { index ->
-                val current = lazyPagingItems[index] ?: return@items
-                val previousMessage = if (index < lazyPagingItems.itemCount - 1) lazyPagingItems[index + 1] else null
-                val nextMessage = if (index > 0) lazyPagingItems[index - 1] else null
-
-                val isMe = current.senderId == 0L
-
-                // 1. Calculate section header requirement (> 1 hour gap = 3,600,000 ms or first message)
-                val showHeader = previousMessage == null ||
-                        abs(current.timestamp - previousMessage.timestamp) > 3_600_000L
-
-                // 2. Calculate sub-20-second spacing rule
-                val isNextSameSender = nextMessage?.senderId == current.senderId
-                val isNextWithin20Sec = nextMessage != null &&
-                        abs(nextMessage.timestamp - current.timestamp) < 20_000L
-
-                val bottomSpacing = if (isNextSameSender && isNextWithin20Sec) 4.dp else 12.dp
-
-                Column {
-                    if (showHeader) {
-                        DateSectionHeader(timestamp = current.timestamp)
-                    }
-                    ChatBubble(
-                        message = current.content,
-                        isSentByMe = isMe,
-                        bottomSpacing = bottomSpacing
-                    )
-                }
-            }
+        if (lazyPagingItems != null) {
+            ChatMessageList(
+                lazyPagingItems = lazyPagingItems,
+                listState = listState,
+                currentUserId = 0L,
+                modifier = Modifier.padding(padding)
+            )
+        } else if (messagesList != null) {
+            ChatMessageListContent(
+                messages = messagesList,
+                listState = listState,
+                currentUserId = 0L,
+                modifier = Modifier.padding(padding)
+            )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ChatDetailPreview() {
+    val sampleMessages = listOf(
+        Message(1L, 1L, 0L, "Does 7pm work for you? I've got to go pick up my little brother first from a party", System.currentTimeMillis()),
+        Message(2L, 1L, 1L, "Yeh for sure that works. What time do you think?", System.currentTimeMillis() - 60000),
+        Message(3L, 1L, 1L, "Wowsa sounds fun", System.currentTimeMillis() - 3600000)
+    )
+
+    SparkChatTheme {
+        ChatDetailScreen(
+            user = User(1L, "Sarah", "avatar_1"),
+            lazyPagingItems = null,
+            textState = "Hey, Sara looks great",
+            sendAsOtherUser = false,
+            listState = rememberLazyListState(),
+            onBackClick = {},
+            onTextChange = {},
+            onSendAsOtherUserChange = {},
+            onSendClick = {},
+            messagesList = sampleMessages
+        )
     }
 }

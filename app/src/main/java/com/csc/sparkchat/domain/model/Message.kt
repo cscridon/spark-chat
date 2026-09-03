@@ -1,5 +1,8 @@
 package com.csc.sparkchat.domain.model
 
+import androidx.annotation.Keep
+
+@Keep
 data class Message(
     val id: Long,
     val userId: Long,

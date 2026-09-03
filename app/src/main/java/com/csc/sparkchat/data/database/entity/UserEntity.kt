@@ -1,9 +1,10 @@
 package com.csc.sparkchat.data.database.entity
 
+import androidx.annotation.Keep
 import androidx.room3.ColumnInfo
 import androidx.room3.Entity
 import androidx.room3.PrimaryKey
-
+@Keep
 @Entity(tableName = "users")
 data class UserEntity(
     @PrimaryKey(autoGenerate = true)

@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Spark Chat</string>
+    <string name="topbar_title">SparkChat</string>
+    <string name="chat_list_empty_snippet">Start a conversation…</string>
+    <string name="type_a_message">Type a message…</string>
+    <string name="send_message">Send message</string>
+    <string name="read_status">Read status</string>
+    <string name="replying">Replying</string>
+    <string name="me">Me</string>
+    <string name="back">Back</string>
 </resources>
